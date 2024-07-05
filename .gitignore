@@ -11,6 +11,7 @@ _ext
 build/
 dist/
 wheels/
+gui_predict*/
 
 # pytorch/python/numpy formats
 *.pth
@@ -18,6 +19,7 @@ wheels/
 *.npy
 *.ts
 model_ts*.txt
+*.tif
 
 # onnx models
 *.onnx

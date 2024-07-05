@@ -14,11 +14,11 @@ from gui_predict import prediction
 import tensorflow as tf
 #import torch
 
-model = tf.keras.models.load_model(r"D:\UCC\Thesis\rbc_wbc_classifier.h5")
+
 
 def upload_image():
 
-    file_path = filedialog.askopenfilename(filetypes= [("Blood smear Image files", "*.tif;*.png;*.jpg;*.jpeg;")])
+    file_path = filedialog.askopenfilename(filetypes= [("Blood smear Image files", "*.tif *.tiff *.png *.jpg *.jpeg")])
     if file_path:
 
         img = Image.open(file_path)
@@ -38,9 +38,9 @@ def predict_image():
     
     if file_path:
         directory = os.path.dirname(file_path)
-        grids_dir = os.path.join(directory, r"gui_predict\grids")
-        masks_dir = os.path.join(directory, r"gui_predict\sam_masks")
-        final_cutouts = os.path.join(directory, r"gui_predict\final_cutouts")
+        grids_dir = os.path.join(directory, r"gui_predict/grids")
+        masks_dir = os.path.join(directory, r"gui_predict/sam_masks")
+        final_cutouts = os.path.join(directory, r"gui_predict/final_cutouts")
 
         print(grids_dir)
         print(masks_dir)
@@ -53,7 +53,8 @@ def predict_image():
         edit_csv(masks_dir)
         
         create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
-
+        
+        model = tf.keras.models.load_model(r"rbc_wbc_classifier.h5")
         counts = prediction(model=model, path=final_cutouts)
         RBC = counts["RBC"]
         WBC = counts["WBC"]

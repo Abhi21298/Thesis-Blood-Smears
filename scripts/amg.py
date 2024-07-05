@@ -225,7 +225,7 @@ def main(args: argparse.Namespace) -> None:
         save_base = os.path.join(args.output, base)
         if output_mode == "binary_mask":
             os.makedirs(save_base, exist_ok=False)
-            write_masks_to_folder(masks, save_base, str(os.path.splitext(args.input.rsplit("\\", maxsplit = 1)[1])[0]) + ".csv")
+            write_masks_to_folder(masks, save_base, str(os.path.splitext(args.input.rsplit("/", maxsplit = 1)[1])[0]) + ".csv")
         else:
             save_file = save_base + ".json"
             with open(save_file, "w") as f:

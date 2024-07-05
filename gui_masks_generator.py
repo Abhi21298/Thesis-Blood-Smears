@@ -30,14 +30,14 @@ def masks(input_dir, output_dir):
             
             
             ps_command = f"""
-                python "D:/UCC/Thesis/segment-anything-main/scripts/amg.py" \
-                --checkpoint "D:/UCC/Thesis/segment-anything-main/sam_vit_h_4b8939.pth" \
+                python "scripts/amg.py" \
+                --checkpoint "sam_vit_h_4b8939.pth" \
                 --model-type "vit_h" \
                 --input {inp_path} \
                 --output {output_dir} \
-                --device "cpu"
-                --pred-iou-thresh 0.92
-                --stability-score-thresh 0.96
+                --points-per-batch 3 \
+                --pred-iou-thresh 0.92 \
+                --stability-score-thresh 0.96 \
                 """.strip()
                 ### torch-gpu --device "cuda" (default) else "cpu"            
 
