@@ -35,7 +35,7 @@ def masks(input_dir, output_dir):
                 --model-type "vit_h" \
                 --input {inp_path} \
                 --output {output_dir} \
-                --points-per-batch 3 \
+                --points-per-batch 8 \
                 --pred-iou-thresh 0.92 \
                 --stability-score-thresh 0.96 \
                 """.strip()

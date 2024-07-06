@@ -42,7 +42,7 @@ def edit_csv_v1(path):
         df = pd.DataFrame(new_df)
         df.to_csv(csv_file, index= False)
 
-def edit_csv(path, cell_area_threshold = 350, connected_com_thresh = 1000):
+def edit_csv(path, cell_area_threshold = 300):
     
     excluded_imgs = os.path.join(os.path.dirname(path), r"excluded")
     os.makedirs(excluded_imgs, exist_ok=True)
@@ -84,10 +84,10 @@ def edit_csv(path, cell_area_threshold = 350, connected_com_thresh = 1000):
                 for label in range(1, num_labels):
 
                     component_mask = (labels == label).astype(np.uint8) * 255
-                    area = sum((labels==label).astype(np.uint8))
+                    area = (labels==label).sum()
                     contours, _ = cv2.findContours(component_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-                    if contours and area > connected_com_thresh:
+                    if contours and area > cell_area_threshold:
                         x,y,w,h = cv2.boundingRect(contours[0])
 
                         #if w*h < connected_com_thresh:
