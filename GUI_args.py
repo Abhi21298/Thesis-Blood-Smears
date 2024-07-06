@@ -23,27 +23,29 @@ def predict_image(args):
 
     if os.path.exists(file_path):
         directory = os.path.dirname(file_path)
-        grids_dir = os.path.join(directory, r"gui_predict\grids")
-        masks_dir = os.path.join(directory, r"gui_predict\sam_masks")
-        final_cutouts = os.path.join(directory, r"gui_predict\final_cutouts")
+        grids_dir = os.path.join(directory, r"gui_predict/grids")
+        masks_dir = os.path.join(directory, r"gui_predict/sam_masks")
+        final_cutouts = os.path.join(directory, r"gui_predict/final_cutouts")
 
         print(grids_dir)
         print(masks_dir)
         print(final_cutouts)
 
-        save_image_patches(file_path, grids_dir)
+        #save_image_patches(file_path, grids_dir)
 
-        masks(input_dir=grids_dir, output_dir=masks_dir)
+        #masks(input_dir=grids_dir, output_dir=masks_dir)
 
-        edit_csv(masks_dir)
+        #edit_csv(masks_dir)
         
-        create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
+        #create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
 
         model = tf.keras.models.load_model(r"rbc_wbc_classifier.h5")
         counts = prediction(model=model, path=final_cutouts)
         RBC = counts["RBC"]
         WBC = counts["WBC"]
         print("RBC count:", RBC, ", WBC Count:", WBC)
+    else:
+        print("Enter the correct path of the image")
 
 
 if __name__ == "__main__":
