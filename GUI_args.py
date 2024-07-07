@@ -16,7 +16,9 @@ parser.add_argument("--input_image",
                     default=None,
                     help="Enter full image path obtained from properties")
 
-        
+def limit_gpu_usage():
+    
+    return 
 def predict_image(args):
     
     file_path = args.input_image
@@ -31,13 +33,13 @@ def predict_image(args):
         print(masks_dir)
         print(final_cutouts)
 
-        #save_image_patches(file_path, grids_dir)
+        save_image_patches(file_path, grids_dir)
 
-        #masks(input_dir=grids_dir, output_dir=masks_dir)
+        masks(input_dir=grids_dir, output_dir=masks_dir)
 
-        #edit_csv(masks_dir)
+        edit_csv(masks_dir)
         
-        #create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
+        create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
 
         model = tf.keras.models.load_model(r"rbc_wbc_classifier.h5")
         counts = prediction(model=model, path=final_cutouts)
