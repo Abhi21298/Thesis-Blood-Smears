@@ -1,5 +1,5 @@
 from PIL import Image, ImageTk
-import os
+import os, shutil
 from gui_grids import save_image_patches
 import argparse
 from gui_masks_generator import masks
@@ -16,9 +16,6 @@ parser.add_argument("--input_image",
                     default=None,
                     help="Enter full image path obtained from properties")
 
-def limit_gpu_usage():
-    
-    return 
 def predict_image(args):
     
     file_path = args.input_image
@@ -27,6 +24,7 @@ def predict_image(args):
         directory = os.path.dirname(file_path)
         grids_dir = os.path.join(directory, r"gui_predict/grids")
         masks_dir = os.path.join(directory, r"gui_predict/sam_masks")
+        masks_dir_copy = os.path.join(directory, r"gui_predict/sam_masks_copy")
         final_cutouts = os.path.join(directory, r"gui_predict/final_cutouts")
 
         print(grids_dir)
@@ -36,12 +34,20 @@ def predict_image(args):
         save_image_patches(file_path, grids_dir)
 
         masks(input_dir=grids_dir, output_dir=masks_dir)
+        shutil.copytree(masks_dir, masks_dir_copy) # backup of original masks to play with testing the below functions
 
         edit_csv(masks_dir)
         
         create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
 
-        model = tf.keras.models.load_model(r"rbc_wbc_classifier.h5")
+        model = tf.keras.models.load_model(r"rbc_wbc_classifier.h5", compile=False)
+
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(),  # Use an appropriate optimizer
+            loss='binary_crossentropy',  # Use binary cross-entropy as the loss function
+            metrics=['accuracy']  # Add any metrics you need
+        )
+
         counts = prediction(model=model, path=final_cutouts)
         RBC = counts["RBC"]
         WBC = counts["WBC"]

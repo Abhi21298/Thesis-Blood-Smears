@@ -87,7 +87,7 @@ def edit_csv(path, cell_area_threshold = 300):
                     area = (labels==label).sum()
                     contours, _ = cv2.findContours(component_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-                    if contours and area > cell_area_threshold:
+                    if contours and area > 500:
                         x,y,w,h = cv2.boundingRect(contours[0])
 
                         #if w*h < connected_com_thresh:
