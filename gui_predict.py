@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import numpy as np
 import matplotlib.pyplot as plt
+import shutil
 
 def prediction(model, path):
     model = model
@@ -36,6 +37,11 @@ def prediction(model, path):
                 #     plt.show()
 
                 tracker[classification] += 1
+                src_path = os.path.join(subroot, img)
+                dst_path = os.path.join(subroot, classification)
+
+                os.makedirs(dst_path, exist_ok=True)
+                shutil.move(src_path, dst_path)
 
     #print("RBC count:", len(tracker["RBC"]))
     #print("WBC count:", len(tracker["WBC"]))

@@ -68,7 +68,7 @@ def edit_csv(path, cell_area_threshold = 300):
             for rows in df:
                 img_path = os.path.join(root, str(rows['id']) + '.png')
                 #print(img_path)
-                if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 3000)) and os.path.exists(img_path):
+                if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 5000)) and os.path.exists(img_path):
                     shutil.move(img_path, os.path.join(excluded_imgs, str(rows['id']) + '.png'))
                     continue
                 
