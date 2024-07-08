@@ -38,9 +38,9 @@ def masks(input_dir, output_dir):
                 --points-per-batch 8 \
                 --pred-iou-thresh 0.92 \
                 --stability-score-thresh 0.96 \
-                --box-nms-thresh 0.3
-                --crop-overlap-ratio 0.1
-                --min-mask-region-area 300
+                --box-nms-thresh 0.3 \
+                --crop-overlap-ratio 0.1 \
+                --min-mask-region-area 300 \
                 """.strip()
                 ### torch-gpu --device "cuda" (default) else "cpu"            
 
