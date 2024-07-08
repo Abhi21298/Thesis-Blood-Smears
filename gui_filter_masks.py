@@ -47,7 +47,6 @@ def edit_csv(path, cell_area_threshold = 300):
     excluded_imgs = os.path.join(os.path.dirname(path), r"excluded")
     os.makedirs(excluded_imgs, exist_ok=True)
     tracker = np.zeros((512,512), dtype=np.uint8)
-    print("inside function")
     
     for root, subdirs, files in os.walk(path):
         if files == [] or files == ():
@@ -56,7 +55,7 @@ def edit_csv(path, cell_area_threshold = 300):
         try:
             #csv_file = os.path.join(root, str(root.rsplit("\\", maxsplit = 1)[1]) + ".csv")
             csv_file = os.path.join(root, str(os.path.basename(root)) + ".csv")
-            df = pd.read_csv(csv_file, header=0).sort_values(by="area").to_dict('records')
+            df = pd.read_csv(csv_file, header=0).sort_values(by="area", ascending=False).to_dict('records')
             
             new_df = {}
             ids = []
@@ -68,7 +67,7 @@ def edit_csv(path, cell_area_threshold = 300):
             for rows in df:
                 img_path = os.path.join(root, str(rows['id']) + '.png')
                 #print(img_path)
-                if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 3000)) and os.path.exists(img_path):
+                if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 4000)) and os.path.exists(img_path):
                     shutil.move(img_path, os.path.join(excluded_imgs, str(rows['id']) + '.png'))
                     continue
                 
