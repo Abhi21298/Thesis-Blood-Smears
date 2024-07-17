@@ -31,9 +31,9 @@ def predict_image(args):
         print(masks_dir)
         print(final_cutouts)
 
-        save_image_patches(file_path, grids_dir)
+        #save_image_patches(file_path, grids_dir)
 
-        masks(input_dir=grids_dir, output_dir=masks_dir)
+        #masks(input_dir=grids_dir, output_dir=masks_dir)
         shutil.copytree(masks_dir, masks_dir_copy) # backup of original masks to play with testing the below functions
 
         edit_csv(masks_dir)

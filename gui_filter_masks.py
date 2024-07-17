@@ -56,14 +56,15 @@ def edit_csv(path, cell_area_threshold = 300):
             #csv_file = os.path.join(root, str(root.rsplit("\\", maxsplit = 1)[1]) + ".csv")
             csv_file = os.path.join(root, str(os.path.basename(root)) + ".csv")
             df = pd.read_csv(csv_file, header=0).sort_values(by="area", ascending=False).to_dict('records')
-            
+            #print(df)
+
             new_df = {}
             ids = []
             bbox_x = []
             bbox_y = []
             bbox_w = []
             bbox_h = []
-            
+
             for rows in df:
                 img_path = os.path.join(root, str(rows['id']) + '.png')
                 #print(img_path)
@@ -73,7 +74,27 @@ def edit_csv(path, cell_area_threshold = 300):
                 
                 img = cv2.imread(img_path, 0)
                 prev = tracker.copy()
+                tracker = cv2.add(prev, img)
+                if np.array_equal(tracker, prev):
+                    os.remove(img_path)
+
+            tracker = np.zeros((512,512), dtype=np.uint8)
+            df = pd.read_csv(csv_file, header=0).sort_values(by="area").to_dict('records')
+            #print(df)
+
+            for rows in df:
+                img_path = os.path.join(root, str(rows['id']) + '.png')
+                print(img_path)
+                # if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 4000)) and os.path.exists(img_path):
+                #     shutil.move(img_path, os.path.join(excluded_imgs, str(rows['id']) + '.png'))
+                #     continue
+                if not os.path.exists(img_path):
+                    continue
+
+                img = cv2.imread(img_path, 0)
+                prev = tracker.copy()
                 tracker = cv2.add(tracker, img)
+
                 diff = cv2.subtract(tracker, prev)
                 _, final_diff = cv2.threshold(diff, 1, 255, cv2.THRESH_BINARY)
 
@@ -120,7 +141,7 @@ def edit_csv(path, cell_area_threshold = 300):
         df.to_csv(csv_file, index= False)
 
 # if __name__ == "__main__":
-#     edit_csv(r"D:\UCC\Thesis\segment-anything-main\test\0_0")
+#     edit_csv(r"/home/amr1/Documents/gui_predict/sam_masks")
 
 
 
