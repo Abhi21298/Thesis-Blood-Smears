@@ -7,6 +7,7 @@ from gui_filter_masks import edit_csv
 from gui_create_cutouts import create_cutouts_dataset
 from gui_predict import prediction
 import tensorflow as tf
+from gui_post_adder import mask_combiner
 
 parser = argparse.ArgumentParser(description="Enter absolute path (full path) of the image")
 
@@ -25,15 +26,16 @@ def predict_image(args):
         grids_dir = os.path.join(directory, r"gui_predict/grids")
         masks_dir = os.path.join(directory, r"gui_predict/sam_masks")
         masks_dir_copy = os.path.join(directory, r"gui_predict/sam_masks_copy")
+        colour_masks = os.path.join(directory, r"gui_predict/colour_masks")
         final_cutouts = os.path.join(directory, r"gui_predict/final_cutouts")
 
         print(grids_dir)
         print(masks_dir)
         print(final_cutouts)
 
-        #save_image_patches(file_path, grids_dir)
+        # save_image_patches(file_path, grids_dir)
 
-        #masks(input_dir=grids_dir, output_dir=masks_dir)
+        # masks(input_dir=grids_dir, output_dir=masks_dir)
         shutil.copytree(masks_dir, masks_dir_copy) # backup of original masks to play with testing the below functions
 
         edit_csv(masks_dir)
@@ -48,7 +50,10 @@ def predict_image(args):
             metrics=['accuracy']  # Add any metrics you need
         )
 
-        counts = prediction(model=model, path=final_cutouts)
+        counts = prediction(model=model, path=final_cutouts, masks_dir = masks_dir)
+
+        mask_combiner(masks_dir, colour_masks)
+
         RBC = counts["RBC"]
         WBC = counts["WBC"]
         print("RBC count:", RBC, ", WBC Count:", WBC)

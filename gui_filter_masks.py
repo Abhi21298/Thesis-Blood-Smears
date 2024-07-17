@@ -64,6 +64,7 @@ def edit_csv(path, cell_area_threshold = 300):
             bbox_y = []
             bbox_w = []
             bbox_h = []
+            cell = []
 
             for rows in df:
                 img_path = os.path.join(root, str(rows['id']) + '.png')
@@ -118,7 +119,7 @@ def edit_csv(path, cell_area_threshold = 300):
                         bbox_w.append(w)
                         bbox_h.append(h)
                         #print(w, h, w*h)
-                        
+                        cell.append("unknown")
                         id = str(rows['id']) + '_' + str(label)
                         ids.append(id)
                         image_name = os.path.join(root, id + '.png')
@@ -135,6 +136,8 @@ def edit_csv(path, cell_area_threshold = 300):
         new_df['bbox_y0'] = bbox_y
         new_df['bbox_w'] = bbox_w
         new_df['bbox_h'] = bbox_h
+        new_df['label'] = cell
+        
         tracker = np.zeros((512,512), dtype=np.uint8)
         print(csv_file)
         df = pd.DataFrame(new_df)

@@ -4,8 +4,9 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 import matplotlib.pyplot as plt
 import shutil
+import pandas as pd
 
-def prediction(model, path):
+def prediction(model, path, masks_dir):
     model = model
     #model = load_model(model)
     imgs = os.listdir(path)
@@ -37,6 +38,18 @@ def prediction(model, path):
                 #     plt.show()
 
                 tracker[classification] += 1
+
+                # update individual csv file mask details with respective class
+                sub_dir_name, id_name  = str(img).split("_", maxsplit= 1)
+                id_name = os.path.splitext(id_name)[0]
+
+                csv_file_path = os.path.join(os.path.join(masks_dir, sub_dir_name), sub_dir_name + ".csv")
+
+                file_contents = pd.read_csv(csv_file_path, header=0, index_col="id")
+                
+                file_contents.loc[id_name, "label"] = classification
+                file_contents.to_csv(csv_file_path, index=True)
+
                 src_path = os.path.join(subroot, img)
                 dst_path = os.path.join(subroot, classification)
 
