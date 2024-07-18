@@ -3,17 +3,22 @@ import numpy as np
 import cv2
 import pandas as pd
 
-def mask_combiner(path, colour_masks, patch_size=512):
+def masks_combiner(path, colour_masks, patch_size=512):
     os.makedirs(colour_masks, exist_ok=True)
 
     for root, subdirs, masks in os.walk(path):
+        h, w = 0, 0
         if masks ==() or masks==[]:
             continue
-        
+        else:
+            file = masks[0] if masks[0].endswith(".png") else masks[1]
+            h, w = cv2.imread(os.path.join(root, file), 0).shape
+
+
         folder_name = str(os.path.basename(root))
         csv_file = os.path.join(root, folder_name + ".csv")
         df = pd.read_csv(csv_file, header=0).to_dict('records')
-        combined_mask = np.zeros((patch_size, patch_size, 3), dtype=np.uint8)
+        combined_mask = np.zeros((h, w, 3), dtype=np.uint8)
         
         for row in df:
             mask_path = os.path.join(root, str(row['id']) + '.png')

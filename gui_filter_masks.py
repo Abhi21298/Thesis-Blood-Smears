@@ -45,18 +45,21 @@ def edit_csv_v1(path):
 def edit_csv(path, cell_area_threshold = 300):
     
     excluded_imgs = os.path.join(os.path.dirname(path), r"excluded")
-    os.makedirs(excluded_imgs, exist_ok=True)
-    tracker = np.zeros((512,512), dtype=np.uint8)
+    os.makedirs(excluded_imgs, exist_ok=True) 
     
     for root, subdirs, files in os.walk(path):
+        h, w = 0, 0
         if files == [] or files == ():
             continue
-        
+        else:
+            file = files[0] if files[0].endswith(".png") else files[1]
+            h, w = cv2.imread(os.path.join(root, file), 0).shape
+            tracker = np.zeros((h, w), dtype=np.uint8)
+
         try:
             #csv_file = os.path.join(root, str(root.rsplit("\\", maxsplit = 1)[1]) + ".csv")
             csv_file = os.path.join(root, str(os.path.basename(root)) + ".csv")
             df = pd.read_csv(csv_file, header=0).sort_values(by="area", ascending=False).to_dict('records')
-            #print(df)
 
             new_df = {}
             ids = []
@@ -79,13 +82,13 @@ def edit_csv(path, cell_area_threshold = 300):
                 if np.array_equal(tracker, prev):
                     os.remove(img_path)
 
-            tracker = np.zeros((512,512), dtype=np.uint8)
+            tracker = np.zeros((h, w), dtype=np.uint8)
             df = pd.read_csv(csv_file, header=0).sort_values(by="area").to_dict('records')
             #print(df)
 
             for rows in df:
                 img_path = os.path.join(root, str(rows['id']) + '.png')
-                print(img_path)
+                # print(img_path)
                 # if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 4000)) and os.path.exists(img_path):
                 #     shutil.move(img_path, os.path.join(excluded_imgs, str(rows['id']) + '.png'))
                 #     continue
@@ -138,8 +141,7 @@ def edit_csv(path, cell_area_threshold = 300):
         new_df['bbox_h'] = bbox_h
         new_df['label'] = cell
         
-        tracker = np.zeros((512,512), dtype=np.uint8)
-        print(csv_file)
+        print("Processed csv_file -", csv_file)
         df = pd.DataFrame(new_df)
         df.to_csv(csv_file, index= False)
 

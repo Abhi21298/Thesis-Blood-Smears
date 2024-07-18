@@ -7,7 +7,9 @@ from gui_filter_masks import edit_csv
 from gui_create_cutouts import create_cutouts_dataset
 from gui_predict import prediction
 import tensorflow as tf
-from gui_post_adder import mask_combiner
+from gui_post_adder import masks_combiner
+from gui_masks_stitcher import masks_stitcher
+from gui_adjusted_cell_counter import count_cells
 
 parser = argparse.ArgumentParser(description="Enter absolute path (full path) of the image")
 
@@ -52,14 +54,21 @@ def predict_image(args):
 
         counts = prediction(model=model, path=final_cutouts, masks_dir = masks_dir)
 
-        mask_combiner(masks_dir, colour_masks)
+        masks_combiner(masks_dir, colour_masks)
+        
+        overall_mask_path = masks_stitcher(file_path, colour_masks)
 
         RBC = counts["RBC"]
         WBC = counts["WBC"]
         print("RBC count:", RBC, ", WBC Count:", WBC)
+
+        print("*"*100)
+        print()
+        print("Adjusted cell count")
+
+        count_cells(f"{overall_mask_path}")
     else:
         print("Enter the correct path of the image")
-
 
 if __name__ == "__main__":
     args = parser.parse_args()
