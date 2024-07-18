@@ -39,6 +39,7 @@ def masks_combiner(path, colour_masks, patch_size=512):
             combined_mask[mask == 255] = color
         
         combined_mask_path = os.path.join(colour_masks, folder_name + ".png")
+        print(f"Instance segmented mask for grid {folder_name}.png")
         cv2.imwrite(combined_mask_path, combined_mask)
 
 

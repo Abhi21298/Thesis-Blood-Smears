@@ -28,8 +28,7 @@ def predict_image(args):
 
     if os.path.exists(file_path):
         directory = os.path.dirname(file_path)
-        #result_folder = "gui_predict_"+str(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
-        result_folder = "gui_predict_2024-07-18T14:25:39"
+        result_folder = "gui_predict_"+str(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
         grids_dir = os.path.join(directory, os.path.join(result_folder, "grids"))
         masks_dir = os.path.join(directory, os.path.join(result_folder, "sam_masks"))
         masks_dir_copy = os.path.join(directory, os.path.join(result_folder, "sam_masks_copy"))
@@ -64,6 +63,8 @@ def predict_image(args):
         
         sleep(5)
         overall_mask_path = masks_stitcher(file_path, colour_masks)
+        
+        sleep(3)
         RBC, WBC = count_cells(f"{overall_mask_path}")
 
         print()

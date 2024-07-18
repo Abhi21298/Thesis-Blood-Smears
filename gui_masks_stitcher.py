@@ -2,6 +2,7 @@ from PIL import Image
 import os
 import sys
 import cv2
+from gui_post_adder import masks_combiner
 
 def masks_stitcher(original_img_path, path, patch_size=512, alpha=0.5):
 
@@ -28,7 +29,9 @@ def masks_stitcher(original_img_path, path, patch_size=512, alpha=0.5):
 
             img_path = os.path.join(path, f"{patch}.png")
             if not os.path.exists(img_path):
-                raise FileNotFoundError(f"Required Image {patch}.png patch not found, please avoid manual tampering of {path} directory")
+                masks_combiner(os.path.join(os.path.dirname(path),os.path.join("sam_masks", patch)),path)
+                if not os.path.exists(img_path):
+                    raise FileNotFoundError(f"Required Image {patch}.png patch not found, please avoid manual tampering of {path} directory")
             
             grid = Image.open(img_path)
             left = col * patch_size
@@ -38,12 +41,13 @@ def masks_stitcher(original_img_path, path, patch_size=512, alpha=0.5):
     
     overall_image_savepath = os.path.join(os.path.dirname(path), "instance_segmented_mask.png")
     overall_image.save(overall_image_savepath)
-
+    print("Complete Instance segmentation mask saved as instance_segmented_mask.png")
     overall_image = cv2.imread(overall_image_savepath)
-
+    
     # alpha = 0.5
     overlay_img = cv2.addWeighted(original_img, 1 - alpha, overall_image, alpha, 0)
     cv2.imwrite(os.path.join(os.path.dirname(path), "final_segmentation_overlap.png"), overlay_img)
+    print("Final image Instance segmented mask overlapped with Original input image saved as final_segmentation_overlap.png")
     return overall_image_savepath
 
 # if __name__ == "__main__":
