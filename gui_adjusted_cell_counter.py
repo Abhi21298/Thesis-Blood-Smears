@@ -22,5 +22,4 @@ def count_cells(mask_image_path):
     num_labels_white, labels_white, stats_white, centroids_white = cv2.connectedComponentsWithStats(white_mask, connectivity=8)
     # Subtract 1 from the count to ignore the background
     num_white = num_labels_white - 1
-    print(f"Number of RBCs: {num_red}")
-    print(f"Number of WBCs: {num_white}")
+    return (num_red, num_white)

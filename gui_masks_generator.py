@@ -3,7 +3,7 @@ import os
 import datetime
 
 
-def masks(input_dir, output_dir):
+def masks(input_dir, output_dir, min_area = 300):
 
     # input_dir = str(input_dir)
     # output_dir = str(args.output_dir)
@@ -40,7 +40,7 @@ def masks(input_dir, output_dir):
                 --stability-score-thresh 0.96 \
                 --crop-nms-thresh 0.1 \
                 --crop-overlap-ratio 0 \
-                --min-mask-region-area 300 \
+                --min-mask-region-area {min_area} \
                 """.strip()
                 ### torch-gpu --device "cuda" (default) else "cpu"            
 

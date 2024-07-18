@@ -11,7 +11,7 @@ def prediction(model, path, masks_dir):
     #model = load_model(model)
     imgs = os.listdir(path)
     
-    tracker = {"RBC": 0, "WBC": 0}
+    # tracker = {"RBC": 0, "WBC": 0}
 
     for subroot, _, imgs in os.walk(path):
         if imgs == [] or imgs == ():
@@ -37,7 +37,7 @@ def prediction(model, path, masks_dir):
                 #     plt.axis('off')
                 #     plt.show()
 
-                tracker[classification] += 1
+                # tracker[classification] += 1
 
                 # update individual csv file mask details with respective class
                 sub_dir_name, id_name  = str(img).split("_", maxsplit= 1)
@@ -60,8 +60,6 @@ def prediction(model, path, masks_dir):
     #print("WBC count:", len(tracker["WBC"]))
 
     #print("WBC images:", tracker["WBC"])
-
-    return tracker
 
 # if __name__ == "__main__":
 #     prediction()

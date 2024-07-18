@@ -3,7 +3,7 @@ import os
 import sys
 import cv2
 
-def masks_stitcher(original_img_path, path, patch_size=512):
+def masks_stitcher(original_img_path, path, patch_size=512, alpha=0.5):
 
     original_img = cv2.imread(original_img_path)
     original_img_dims = original_img.shape
@@ -28,7 +28,7 @@ def masks_stitcher(original_img_path, path, patch_size=512):
 
             img_path = os.path.join(path, f"{patch}.png")
             if not os.path.exists(img_path):
-                raise FileNotFoundError(f"Required Image patch not found, please avoid manual tampering of {path} directory")
+                raise FileNotFoundError(f"Required Image {patch}.png patch not found, please avoid manual tampering of {path} directory")
             
             grid = Image.open(img_path)
             left = col * patch_size
@@ -41,7 +41,7 @@ def masks_stitcher(original_img_path, path, patch_size=512):
 
     overall_image = cv2.imread(overall_image_savepath)
 
-    alpha = 0.5
+    # alpha = 0.5
     overlay_img = cv2.addWeighted(original_img, 1 - alpha, overall_image, alpha, 0)
     cv2.imwrite(os.path.join(os.path.dirname(path), "final_segmentation_overlap.png"), overlay_img)
     return overall_image_savepath
