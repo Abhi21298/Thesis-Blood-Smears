@@ -17,26 +17,29 @@ def masks_combiner(path, colour_masks, patch_size=512):
 
         folder_name = str(os.path.basename(root))
         csv_file = os.path.join(root, folder_name + ".csv")
-        df = pd.read_csv(csv_file, header=0).to_dict('records')
-        combined_mask = np.zeros((h, w, 3), dtype=np.uint8)
         
-        for row in df:
-            mask_path = os.path.join(root, str(row['id']) + '.png')
-            label = row['label']
+        combined_mask = np.zeros((h, w, 3), dtype=np.uint8)
+        try:
+            df = pd.read_csv(csv_file, header=0).to_dict('records')
+            for row in df:
+                mask_path = os.path.join(root, str(row['id']) + '.png')
+                label = row['label']
 
-            color = (0, 0, 128)  # Red for RBC, white for WBC
-            if label == 'WBC':
-                color = (255, 255, 255)
+                color = (0, 0, 128)  # Red for RBC, green for WBC
+                if label == 'WBC':
+                    color = (0, 128, 0)
 
-            # Load binary mask
-            mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-            # print(mask.shape)
-            # # Convert single-channel mask to 3-channel (BGR)
-            # mask_rgb = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
-            # print(mask.shape)
+                # Load binary mask
+                mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+                # print(mask.shape)
+                # # Convert single-channel mask to 3-channel (BGR)
+                # mask_rgb = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
+                # print(mask.shape)
 
-            # Apply color to combined mask where mask is white (255)
-            combined_mask[mask == 255] = color
+                # Apply color to combined mask where mask is white (255)
+                combined_mask[mask == 255] = color
+        except:
+            print("")
         
         combined_mask_path = os.path.join(colour_masks, folder_name + ".png")
         print(f"Instance segmented mask for grid {folder_name}.png")

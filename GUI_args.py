@@ -3,8 +3,9 @@ import shutil
 import argparse
 from datetime import datetime
 from time import sleep
-from gui_grids import save_image_patches
 from PIL import Image, ImageTk
+from gui_increase_brightness import increase_brightness
+from gui_grids import save_image_patches
 from gui_masks_generator import masks
 from gui_filter_masks import edit_csv
 from gui_create_cutouts import create_cutouts_dataset
@@ -28,7 +29,9 @@ def predict_image(args):
 
     if os.path.exists(file_path):
         directory = os.path.dirname(file_path)
-        result_folder = "gui_predict_"+str(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
+        name = "_".join(list(map(str, os.path.splitext(os.path.basename(file_path))[0].split(" "))))
+        #result_folder = "gui_predict_2024-07-18T22:27:48"
+        result_folder = "gui_predict_"+name+"_"+str(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
         grids_dir = os.path.join(directory, os.path.join(result_folder, "grids"))
         masks_dir = os.path.join(directory, os.path.join(result_folder, "sam_masks"))
         masks_dir_copy = os.path.join(directory, os.path.join(result_folder, "sam_masks_copy"))
@@ -39,6 +42,8 @@ def predict_image(args):
         print(masks_dir)
         print(final_cutouts)
 
+        increase_brightness(file_path)
+        
         save_image_patches(file_path, grids_dir)
 
         masks(input_dir=grids_dir, output_dir=masks_dir)
@@ -48,12 +53,12 @@ def predict_image(args):
         
         create_cutouts_dataset(orig_image_path=grids_dir, input_dir=masks_dir, output_dir=final_cutouts)
 
-        model = tf.keras.models.load_model(r"rbc_wbc_classifier.h5", compile=False)
+        model = tf.keras.models.load_model(r"rbc_wbc_classifier_finetuned.h5", compile=False)
 
         model.compile(
-            optimizer=tf.keras.optimizers.Adam(),  # Use an appropriate optimizer
-            loss='binary_crossentropy',  # Use binary cross-entropy as the loss function
-            metrics=['accuracy']  # Add any metrics you need
+           optimizer=tf.keras.optimizers.Adam(),  # Use an appropriate optimizer
+           loss='binary_crossentropy',  # Use binary cross-entropy as the loss function
+           metrics=['accuracy']  # Add any metrics you need
         )
 
         prediction(model=model, path=final_cutouts, masks_dir = masks_dir)

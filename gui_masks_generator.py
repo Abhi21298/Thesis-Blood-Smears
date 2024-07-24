@@ -3,7 +3,7 @@ import os
 import datetime
 
 
-def masks(input_dir, output_dir, min_area = 300):
+def masks(input_dir, output_dir, min_area = 100):
 
     # input_dir = str(input_dir)
     # output_dir = str(args.output_dir)
@@ -35,12 +35,11 @@ def masks(input_dir, output_dir, min_area = 300):
                 --model-type "vit_h" \
                 --input {inp_path} \
                 --output {output_dir} \
-                --points-per-batch 16 \
+                --points-per-batch 32 \
                 --pred-iou-thresh 0.92 \
                 --stability-score-thresh 0.96 \
                 --crop-nms-thresh 0.1 \
                 --crop-overlap-ratio 0 \
-                --min-mask-region-area {min_area} \
                 """.strip()
                 ### torch-gpu --device "cuda" (default) else "cpu"            
 
@@ -64,5 +63,4 @@ def masks(input_dir, output_dir, min_area = 300):
 
             # testing out for only 1 image include break else remove
             # break
-            
-            
+             

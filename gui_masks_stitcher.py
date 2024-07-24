@@ -20,8 +20,8 @@ def masks_stitcher(original_img_path, path, patch_size=512, alpha=0.5):
 
     patch = 0
 
-    row_patches = (orig_w // patch_size) + 1
-    col_patches = (orig_h // patch_size) + 1
+    row_patches = (orig_w // patch_size) if orig_w % patch_size == 0 else (orig_w // patch_size) + 1
+    col_patches = (orig_h // patch_size) if orig_h % patch_size == 0 else (orig_h // patch_size) + 1
     overall_image = Image.new('RGB', (orig_w, orig_h))
     
     for row in range(col_patches):
@@ -29,7 +29,7 @@ def masks_stitcher(original_img_path, path, patch_size=512, alpha=0.5):
 
             img_path = os.path.join(path, f"{patch}.png")
             if not os.path.exists(img_path):
-                masks_combiner(os.path.join(os.path.dirname(path),os.path.join("sam_masks", patch)),path)
+                masks_combiner(os.path.join(os.path.dirname(path),os.path.join("sam_masks", str(patch))),path)
                 if not os.path.exists(img_path):
                     raise FileNotFoundError(f"Required Image {patch}.png patch not found, please avoid manual tampering of {path} directory")
             

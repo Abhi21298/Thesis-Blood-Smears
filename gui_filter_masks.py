@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def edit_csv(path, cell_area_threshold = 300):
+def edit_csv(path, cell_area_threshold = 100):
     
     excluded_imgs = os.path.join(os.path.dirname(path), r"excluded")
     os.makedirs(excluded_imgs, exist_ok=True) 
