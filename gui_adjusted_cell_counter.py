@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
+#from sklearn.cluster import KMeans
+from scipy.signal import find_peaks
 import os
 
 def count_cells(mask_image_path):
@@ -34,12 +35,11 @@ def count_cells(mask_image_path):
     print("Cell counting done")
 
     areas_red = areas_red.reshape(-1, 1)
-    kmeans = KMeans(n_clusters=4, random_state=0).fit(areas_red)
-    cluster_centers = kmeans.cluster_centers_
-    #cluster_labels = kmeans.labels_
+    #kmeans = KMeans(n_clusters=4, random_state=0).fit(areas_red)
+    #cluster_centers = kmeans.cluster_centers_
 
     # Sort cluster centers to determine cutoffs
-    sorted_centers = np.sort(cluster_centers.flatten())
+    #sorted_centers = np.sort(cluster_centers.flatten())
 
     plt.figure(figsize=(12, 6))
     plt.hist(areas_red, bins=30, color='red', edgecolor='black')
@@ -47,25 +47,44 @@ def count_cells(mask_image_path):
     plt.xlabel('Area')
     plt.ylabel('Frequency')
     
-    thresholds = [(sorted_centers[i] + sorted_centers[i+1]) / 2 for i in range(len(sorted_centers) - 1)]
+    # Detect peaks in the histogram
+    hist, bin_edges = np.histogram(areas_red, bins=30)
+    bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+    peaks, _ = find_peaks(hist)
+    
+    first_peak = bin_centers[peaks[0]]
+    plt.axvline(x=first_peak*1.5, color='blue', linestyle='--', linewidth=2)
+    plt.axvline(x=first_peak*2.5, color='blue', linestyle='--', linewidth=2)
+    plt.axvline(x=first_peak*3.5, color='blue', linestyle='--', linewidth=2)
+    #thresholds = [(sorted_centers[i] + sorted_centers[i+1]) / 2 for i in range(len(sorted_centers) - 1)]
 
     # Mark the thresholds with vertical lines on the histogram
-    for threshold in thresholds[1:]:
-        plt.axvline(x=threshold, color='blue', linestyle='--', linewidth=2)
+    #for threshold in thresholds[1:]:
+    #    plt.axvline(x=threshold, color='blue', linestyle='--', linewidth=2)
     
     # Save the histogram plot
     plt.savefig(os.path.join(os.path.dirname(mask_image_path), "RBC_area_histogram.png"))
-
+    
+    #for area in areas_red:
+    #    if area > thresholds[2]:
+    #        num_red += 3
+    #    elif area > thresholds[1]:
+    #        num_red += 2
+    #    else:
+    #        num_red += 1
+    
     for area in areas_red:
-        if area > thresholds[2]:
+        if area > (first_peak * 3.5):
+            num_red += 4
+        elif area > (first_peak * 2.5):
             num_red += 3
-        elif area > thresholds[1]:
+        elif area > (first_peak * 1.5):
             num_red += 2
         else:
             num_red += 1
-    
+
     return (num_red, num_white)
 
 #if __name__ == "__main__":
-#    rbc, wbc = count_cells(r"/home/amr1/Documents/gui_predict_IMG00645_2024-07-24T20:26:44/instance_segmented_mask.png")
+#    rbc, wbc = count_cells(r"/home/amr1/Documents/gui_predict_IMG00360_2024-07-31T14:28:27/instance_segmented_mask.png")
 #    print(rbc, wbc)

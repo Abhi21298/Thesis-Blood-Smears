@@ -3,13 +3,13 @@ import cv2
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def create_cutouts_dataset(orig_image_path, input_dir, output_dir):
+def create_cutouts_dataset(orig_image_path, input_dir, output_dir, dims = 128):
     
     #work_dir = args.work_dir
     #orig_image_path = os.path.join(work_dir, args.grid_images_dir)
     #input_dir = os.path.join(work_dir,args.output_dir)
     #output_dir = os.path.join(work_dir, "compiled_dataset")
-    dims = 96
+    
     i = 0
     if not os.path.exists(input_dir):
         raise("Enter a proper input directory containing the filtered masks (both rbc and wbc masks)")

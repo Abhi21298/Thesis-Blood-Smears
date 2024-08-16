@@ -27,7 +27,7 @@ def upload_image():
     if file_path:
 
         img = Image.open(file_path)
-        img.thumbnail((500,500))
+        img.thumbnail((700,700))
 
         # Below four lines are important to keep reference to image alive
         # or else image display will disappear from the GUI window
@@ -40,7 +40,7 @@ def upload_image():
 
 def display_image(image_path, target_label):
     img = Image.open(image_path)
-    img.thumbnail((200, 200))
+    img.thumbnail((450, 350))
     img_display = ImageTk.PhotoImage(img)
     target_label.configure(image=img_display)
     target_label.image = img_display
@@ -51,7 +51,7 @@ def predict_image():
     if file_path:
         directory = os.path.dirname(file_path)
         name = "_".join(list(map(str, os.path.splitext(os.path.basename(file_path))[0].split(" "))))
-        #result_folder = "gui_predict_2024-07-18T22:27:48"
+        #result_folder = r"gui_predict_IMG00649_2024-07-29T00:42:05"
         result_folder = "gui_predict_"+name+"_"+str(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
         grids_dir = os.path.join(directory, os.path.join(result_folder, "grids"))
         masks_dir = os.path.join(directory, os.path.join(result_folder, "sam_masks"))
@@ -90,7 +90,7 @@ def predict_image():
         sleep(5)
         overall_mask_path = masks_stitcher(file_path, colour_masks)
         
-        sleep(3)
+        # sleep(3)
         RBC, WBC = count_cells(f"{overall_mask_path}")
         display_image(file_path, label_image)
         display_image(overall_mask_path, label_final_mask)
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     
     window = tk.Tk()
     window.title("RBC/WBC Counter")
-    window.geometry("1000x800")
+    window.geometry("1000x1000")
 
     label_image = Label(window)
     label_image.pack(pady=10)

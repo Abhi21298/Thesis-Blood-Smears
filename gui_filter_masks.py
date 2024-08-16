@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def edit_csv(path, cell_area_threshold = 100):
+def edit_csv(path, cell_area_threshold = 300):
     
     excluded_imgs = os.path.join(os.path.dirname(path), r"excluded")
     os.makedirs(excluded_imgs, exist_ok=True) 
@@ -36,7 +36,7 @@ def edit_csv(path, cell_area_threshold = 100):
             for rows in df:
                 img_path = os.path.join(root, str(rows['id']) + '.png')
                 #print(img_path)
-                if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 4000)) and os.path.exists(img_path):
+                if (int(rows["area"]) < cell_area_threshold or int(rows['area'] > 9000)) and os.path.exists(img_path):
                     shutil.move(img_path, os.path.join(excluded_imgs, str(rows['id']) + '.png'))
                     continue
                 

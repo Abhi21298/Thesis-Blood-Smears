@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import shutil
 import pandas as pd
 
-def prediction(model, path, masks_dir):
+def prediction(model, path, masks_dir, t_size = 128):
     model = model
     #model = load_model(model)
     imgs = os.listdir(path)
@@ -20,7 +20,7 @@ def prediction(model, path, masks_dir):
         for img in imgs:
             if img.endswith(".png"):
                 ## preprocess image
-                imag = image.load_img(os.path.join(subroot, img), target_size = (96,96))
+                imag = image.load_img(os.path.join(subroot, img), target_size = (t_size, t_size))
                 imag_array = image.img_to_array(imag)
                 imag_array = np.expand_dims(imag_array, axis = 0)
 

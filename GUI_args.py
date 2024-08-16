@@ -45,6 +45,7 @@ def predict_image(args):
         increase_brightness(file_path)
         
         save_image_patches(file_path, grids_dir)
+        shutil.copy(file_path, os.getcwd())
 
         masks(input_dir=grids_dir, output_dir=masks_dir)
         shutil.copytree(masks_dir, masks_dir_copy) # backup of original masks to play with testing the below functions
