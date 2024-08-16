@@ -44,3 +44,4 @@ _darcs
 yarn.lock
 package-lock.json
 *.h5
+*.JPG
