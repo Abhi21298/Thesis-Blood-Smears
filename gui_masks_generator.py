@@ -40,7 +40,6 @@ def masks(input_dir, output_dir, min_area = 100):
                 --stability-score-thresh 0.96 \
                 --crop-nms-thresh 0.1 \
                 --crop-overlap-ratio 0 \
-                --device "cpu"
                 """.strip()
                 ### torch-gpu --device "cuda" (default) else "cpu"            
 
