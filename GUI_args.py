@@ -2,7 +2,7 @@ import os
 import shutil
 import argparse
 from datetime import datetime
-from time import sleep
+from time import sleep, time
 from PIL import Image, ImageTk
 from gui_increase_brightness import increase_brightness
 from gui_grids import save_image_patches
@@ -28,6 +28,7 @@ def predict_image(args):
     file_path = args.input_image
 
     if os.path.exists(file_path):
+        start = time()
         directory = os.path.dirname(file_path)
         name = "_".join(list(map(str, os.path.splitext(os.path.basename(file_path))[0].split(" "))))
         #result_folder = "gui_predict_2024-07-18T22:27:48"
@@ -79,6 +80,10 @@ def predict_image(args):
         print("Cell count Results".center(100))
         print("RBC count:",RBC)
         print("WBC count:",WBC)
+
+        end = time()
+        width, height = Image.open(file_path).size
+        print(f"Execution time for image with size ({width},{height}) = {end-start} seconds")
 
     else:
         print("Enter the correct path of the image")

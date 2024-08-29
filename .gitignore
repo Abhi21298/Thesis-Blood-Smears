@@ -45,3 +45,4 @@ yarn.lock
 package-lock.json
 *.h5
 *.JPG
+/image_carver.py
