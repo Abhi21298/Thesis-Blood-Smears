@@ -24,7 +24,7 @@ pip install tensorflow[and-cuda]
 - Download [SAM checkpoint](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth).
 - Download [CNN_Classifier](https://drive.google.com/file/d/15vL5UkgOWLVVuaVif6HiBUaeEuzXcrvZ/view?usp=drive_link)
 - Download [CNN_finetuned_classifier](https://drive.google.com/file/d/1QDYEOpvdG4XISQFKLT7RocRzSU_7yHlo/view?usp=drive_link)
-- 
+ 
 ## Execution - 
 
 Run GUI.py for launching GUI based application to run the code or execute GUI_args.py to perform the same action in command line argument. Pass the --input_image "<image-to-examine>" as an argument for the code to work on the image.
