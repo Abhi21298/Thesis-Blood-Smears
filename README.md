@@ -19,7 +19,7 @@ pip install --no-cache-dir --extra-index-url https://pypi.nvidia.com tensorrt-li
 pip install tensorflow[and-cuda]
 ```
 
-2. Once the installations are successfully done, pull/fork this github repository onto to your system and download the following models and place all of them beside the python scripts.
+2. Once the installations are successfully done, pull/fork this github repository onto your system and download the following models and place all of them beside the python scripts.
 
 - Download [SAM checkpoint](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth).
 - Download [CNN_Classifier](https://drive.google.com/file/d/15vL5UkgOWLVVuaVif6HiBUaeEuzXcrvZ/view?usp=drive_link)
